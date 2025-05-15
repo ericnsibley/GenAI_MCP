@@ -1,0 +1,9 @@
+pandas 
+mcp 
+python-dotenv
+langgraph
+langchain-mcp-adapters
+langchain-openai
+fastapi
+uvicorn
+jinja2

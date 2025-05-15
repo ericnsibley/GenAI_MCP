@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Real Estate Chatbot</title>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 2rem auto;
+            max-width: 600px;
+            background: #f6f6f6;
+            padding: 1rem;
+        }
+        .chatbox {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            height: 400px;
+            overflow-y: auto;
+        }
+        .message {
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+        .user { background: #daf0ff; align-self: flex-end; }
+        .assistant { background: #eaeaea; align-self: flex-start; }
+        .input-row {
+            display: flex;
+            margin-top: 1rem;
+        }
+        .input-row input {
+            flex-grow: 1;
+            padding: 0.5rem;
+        }
+        .input-row button {
+            margin-left: 0.5rem;
+            padding: 0.5rem;
+        }
+        .conversation {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Chat with Real Estate Assistant</h2>
+        <button hx-post="/clear" 
+                hx-target="#chat" 
+                hx-swap="innerHTML"
+                style="background: #ffdddd; border: none; padding: 0.5rem; border-radius: 5px; cursor: pointer;">
+            Clear Chat
+        </button>
+    </div>
+
+    <div class="chatbox">
+        <div id="chat" class="conversation">
+            {% for message in messages %}
+                <div class="message {{ message.role }}">
+                    {{ message.content }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <form hx-post="/send" hx-target="#chat" hx-swap="beforeend" class="input-row">
+        <input type="text" name="message" placeholder="Type your message..." required autocomplete="off">
+        <button type="submit"
+                style="background: #ffdddd; border: none; padding: 0.5rem; border-radius: 5px; cursor: pointer;">
+            Send
+        </button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,5 @@
+{% for message in messages %}
+<div class="message {{ message.role }}">
+    {{ message.content | safe }}
+</div>
+{% endfor %}
