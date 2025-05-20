@@ -17,8 +17,6 @@ The data I'm going to be loading includes:
 - **Zillow Observed Rent Index (ZORI)** – *A smoothed measure of typical market rents observed across current and off market rental listings.*
 - **Zillow Observed Rent Forecast (ZORF)** – *Projected changes in rent prices based on trends in the ZORI and market indicators.*
 
-You may notice that I'm excluding the ZHVI data and that's due to lack of data - they only recently started to track this. 
-
 This is very domain specific data - you may not want to make guesses about the data without reading the definitions - so I think it'll make for a great example as the LLM won't be able to intuit its way through a trivial set of problems. 
 
 I want to ask the LLM to help me find a market with a balance of affordable houses with rents that cash flow with great projected future growth rates. I don't want to take these projected growth rates for granted either - let's do a little programming to see how often and in which area they tend to be correct. I expect this to take a lot of prompt engineering to craft different queries. Then, I'll be able to store these prompts as MCP prompts to suggest to the chatbot and execute against the database. 

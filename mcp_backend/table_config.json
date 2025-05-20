@@ -1,0 +1,11 @@
+{
+    "ZHVI": "Zillow Home Value Index: A measure of the typical home value and market changes across a given region and housing type. It reflects the typical value for homes in the 35th to 65th percentile range.",
+    "ZHVF": "Zillow Home Value Forecast: A month-ahead, quarter-ahead and year-ahead forecast of the Zillow Home Value Index (ZHVI). ZHVF is created using the all homes, mid-tier cut of ZHVI.",
+    "ZORI": "Zillow Observed Rent Index: A smoothed measure of the typical observed market rate rent across a given region. ZORI is a repeat-rent index that is weighted to the rental housing stock to ensure representativeness across the entire market, not just those homes currently listed for-rent. The index is dollar-denominated by computing the mean of listed rents that fall into the 35th to 65th percentile range for all homes and apartments in a given region, which is weighted to reflect the rental housing stock.",
+    "ZORF": "Zillow Observed Rent Forecast: A month-ahead, quarter-ahead and year-ahead forecast of the Zillow Observed Rent Index (ZORI)",
+    "for_sale_inventory": "For-Sale Inventory: The count of unique listings that were active at any time in a given month.",
+    "sales": "Sales count: The estimated number of unique properties that sold during the month. The latest month's number is the estimation after accounting for the latency between when sales occur and when they are reported.",
+    "days_on_market": "How long it takes homes in a region to change to pending status on Zillow.com after first being shown as for sale. The reported figure indicates the mean number of days that it took for homes to go pending.",
+    "market_heat_index": "The market heat index is a time series dataset that aims to capture the balance of for-sale supply and demand in a given market. A higher number means the market is more tilted in favor of sellers.",
+    "affordability": "An estimate of the annual household income required to spend less than 30% of monthly income on the total monthly payment after newly purchasing the typical home with a 20% down payment."
+}

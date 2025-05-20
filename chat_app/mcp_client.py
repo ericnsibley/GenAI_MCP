@@ -9,7 +9,7 @@ from langchain_openai import ChatOpenAI
 import asyncio
 
 load_dotenv('../.env')
-MCP_SERVER_PATH = '../mcp_server.py'
+MCP_SERVER_PATH = '../mcp_backend/mcp_server.py'
 
 
 class MCPClient:
@@ -17,6 +17,13 @@ class MCPClient:
         self.session: Optional[ClientSession] = None 
         self.stack = AsyncExitStack()
         self.model = ChatOpenAI(model=model)
+        self.prompt = """You are a helpful and knowledgeable real estate assistant. 
+The system has provided you with tools to access a database containing some real estate data from Zillow describing current and historical market trends. 
+Call the tools to answer the user's questions. 
+Describe the tables to know which relevant tables are valid to inspect. 
+Inspect the tables for more information if needed to answer the user's questions. 
+Show your step by step train of thought in answering the user's questions. 
+"""
 
 
     async def connect_to_mcp_server(self, server_script_path: str) -> None:
@@ -33,9 +40,13 @@ class MCPClient:
         await self.session.initialize()
 
         tools = await load_mcp_tools(self.session)
-        print(f"tools: {tools}")
-        self.agent = create_react_agent(self.model, tools)
-        print(f"agent: {self.agent}")
+        print(f"tools: {[ (tool.name, tool.description) for tool in tools ]}")
+
+        self.agent = create_react_agent(
+            model=self.model, 
+            tools=tools,
+            prompt=self.prompt
+        )
 
 
     async def process_query(self, query: str = None) -> dict[str, any]: 

@@ -43,10 +43,8 @@ async def send_message(request: Request, message: str = Form(...), agent: MCPCli
     for m in response_messages:
         match m:
             case ToolMessage(content=c, name=n):
-                print(f"tool message: {m}")
-                tool_steps.append(f"Tool <strong>{n}</strong> returned <code>{c}</code>")
+                tool_steps.append(f"Tool <strong>{n}</strong> returned <br><code>{c}</code>")
             case AIMessage(content=c, name=n) if c:
-                print(f"ai message: {m}")
                 final_answer = m.content
             case HumanMessage():
                 continue
