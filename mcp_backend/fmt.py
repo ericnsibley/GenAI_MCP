@@ -1,5 +1,4 @@
 import json 
-import os 
 
 TABLE_CONFIG_FILE = '../mcp_backend/table_config.json'
 TABLE_CONFIG: dict | None = None
