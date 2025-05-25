@@ -1,5 +1,6 @@
 .env
 /.venv 
 __pycache__/
-*.csv
+# *.csv I don't like tracking data in git, but this is free 
 Zillow_data
+*.sqlite
