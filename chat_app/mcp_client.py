@@ -13,10 +13,11 @@ MCP_SERVER_PATH = '../mcp_backend/mcp_server.py'
 
 
 class MCPClient:
-    def __init__(self, model: str = "gpt-4.1-nano"):
+    def __init__(self, openai_key: str, mcp_server_path: str, model: str = "gpt-4.1-nano"):
         self.session: Optional[ClientSession] = None 
         self.stack = AsyncExitStack()
-        self.model = ChatOpenAI(model=model)
+        self.server_file = mcp_server_path
+        self.model = ChatOpenAI(model=model, api_key=openai_key)
         self.prompt = """You are a helpful and knowledgeable real estate assistant. 
 The system has provided you with tools to access a database containing some real estate data from Zillow describing current and historical market trends. 
 Call the tools to answer the user's questions. 
@@ -26,13 +27,13 @@ Show your step by step train of thought in answering the user's questions.
 """
 
 
-    async def connect_to_mcp_server(self, server_script_path: str) -> None:
-        if not server_script_path.endswith('.py'):
+    async def connect_to_mcp_server(self) -> None:
+        if not self.server_file.endswith('.py'):
             raise ValueError("Server script must be a .py file")
 
         server_params = StdioServerParameters(
             command="python",
-            args=[server_script_path],
+            args=[self.server_file],
             env=None
         )
         self.receive_stream, self.send_stream = await self.stack.enter_async_context(stdio_client(server_params))

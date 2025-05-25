@@ -5,5 +5,5 @@ langgraph
 langchain-mcp-adapters
 langchain-openai
 fastapi
-uvicorn
+uvicorn[standard]
 jinja2

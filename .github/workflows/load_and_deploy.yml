@@ -1,0 +1,30 @@
+on: 
+  push: 
+    branches: 
+      - master
+
+env:
+  REGISTRY: ghcr.io
+
+jobs: 
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps: 
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker image 
+        run: | 
+          docker build -t ${{ env.REGISTRY }}/${{ github.actor }}/real_estate_mcp:latest .
+  
+      - name: Push Docker image
+        run: |
+          docker push ${{ env.REGISTRY }}/${{ github.actor }}/real_estate_mcp:latest
