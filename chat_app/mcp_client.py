@@ -26,7 +26,11 @@ Call the tools to answer the user's questions.
 Describe the tables to know which relevant tables are valid to inspect. 
 Inspect the tables for more information if needed to answer the user's questions. 
 Show your step by step train of thought in answering the user's questions. 
-"""
+"""     
+        self.tools = []
+        if os.environ.get('TAVILY_API_KEY'):
+            tavily_tool = TavilySearch()
+            self.tools.append(tavily_tool)
 
 
     async def connect_to_mcp_server(self) -> None:
@@ -43,9 +47,7 @@ Show your step by step train of thought in answering the user's questions.
         await self.session.initialize()
 
         tools = await load_mcp_tools(self.session)
-
-        tavily_tool = TavilySearch()
-        tools.append(tavily_tool)
+        tools += self.tools
 
         print(f"tools: {[ (tool.name, tool.description) for tool in tools ]}")
 
