@@ -1,19 +1,11 @@
 from mcp.server.fastmcp import FastMCP
-import signal 
-import sys 
 from sqlite_driver import SqliteDriver
 import fmt
 
-SERVER_NAME = "sqlite_mcp_server"
+SERVER_NAME = "real_estate_mcp_server"
 SQLITE_DB = "Zillow_data"
 PORT = 5000
 HOST = "127.0.0.1"
-
-def signal_handler(sig, frame):
-    print("Shutting down server...")
-    sys.exit(0)
-
-signal.signal(signal.SIGINT, signal_handler) # Ctrl+c
 
 mcp = FastMCP(
     name=SERVER_NAME,
@@ -25,17 +17,6 @@ mcp = FastMCP(
 
 def get_sql_driver(db_file: str = SQLITE_DB) -> SqliteDriver:
     return SqliteDriver(f"../{db_file}")
-
-@mcp.tool()
-def add(a: int, b: int) -> int:
-    """Add two numbers"""
-    return a + b
-
-
-@mcp.tool()
-def multiply(a: int, b: int) -> int:
-    """Multiply two numbers"""
-    return a * b
 
 
 @mcp.tool()
