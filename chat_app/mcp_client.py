@@ -7,13 +7,15 @@ from langchain_mcp_adapters.tools import load_mcp_tools
 from langgraph.prebuilt import create_react_agent
 from langchain_openai import ChatOpenAI
 import asyncio
+import os
+from langchain_tavily import TavilySearch
 
 load_dotenv('../.env')
 MCP_SERVER_PATH = '../mcp_backend/mcp_server.py'
 
 
 class MCPClient:
-    def __init__(self, openai_key: str, mcp_server_path: str, model: str = "gpt-4.1-nano"):
+    def __init__(self, openai_key: str, mcp_server_path: str = MCP_SERVER_PATH, model: str = "gpt-4.1-nano"):
         self.session: Optional[ClientSession] = None 
         self.stack = AsyncExitStack()
         self.server_file = mcp_server_path
@@ -28,8 +30,8 @@ Show your step by step train of thought in answering the user's questions.
 
 
     async def connect_to_mcp_server(self) -> None:
-        if not self.server_file.endswith('.py'):
-            raise ValueError("Server script must be a .py file")
+        if not (os.path.isfile(self.server_file) and self.server_file.endswith('.py')):
+            raise FileNotFoundError(f"Server script '{self.server_file}' must exist and be a .py file")
 
         server_params = StdioServerParameters(
             command="python",
@@ -41,12 +43,17 @@ Show your step by step train of thought in answering the user's questions.
         await self.session.initialize()
 
         tools = await load_mcp_tools(self.session)
+
+        tavily_tool = TavilySearch()
+        tools.append(tavily_tool)
+
         print(f"tools: {[ (tool.name, tool.description) for tool in tools ]}")
 
         self.agent = create_react_agent(
             model=self.model, 
             tools=tools,
-            prompt=self.prompt
+            prompt=self.prompt,
+            name="real_estate_agent"
         )
 
 

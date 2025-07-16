@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request, Form, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from mcp_client import MCPClient, MCP_SERVER_PATH
+from mcp_client import MCPClient
 from langchain_core.messages import ToolMessage, AIMessage, HumanMessage
 
 ENDPOINT_PREFIX = "/real-estate-chat"
@@ -21,7 +21,7 @@ async def home(request: Request):
 async def send_message(request: Request, message: str = Form(...), openai_key: str = Form(...)):
     agent = None
     try:
-        agent = MCPClient(openai_key=openai_key, mcp_server_path=MCP_SERVER_PATH)
+        agent = MCPClient(openai_key=openai_key)
         await agent.connect_to_mcp_server()
 
         user_msg = {"role": "user", "content": message}
