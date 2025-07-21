@@ -42,8 +42,13 @@ async def inspect_table(table_name: str, limit: int = 10, db_name: str = "main")
     """Dump schema and sample rows from a table"""
     try:
         sql_driver = get_sql_driver()
+        # Try to sort by ForecastDate if the column exists
         cols = sql_driver.execute_query(f"PRAGMA {db_name}.table_info({table_name})")
-        rows = sql_driver.execute_query(f"SELECT * FROM {db_name}.{table_name} LIMIT ?", [limit])
+        col_names = [c.cells.get('name') for c in cols]
+        if 'ForecastDate' in col_names:
+            rows = sql_driver.execute_query(f"SELECT * FROM {db_name}.{table_name} ORDER BY ForecastDate DESC LIMIT ?", [limit])
+        else:
+            rows = sql_driver.execute_query(f"SELECT * FROM {db_name}.{table_name} LIMIT ?", [limit])
 
         table_str = fmt.format_table_name(table_name)
         col_str = fmt.format_columns_as_markdown([c.cells for c in cols])
