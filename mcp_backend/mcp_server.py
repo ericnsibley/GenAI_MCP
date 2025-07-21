@@ -38,17 +38,27 @@ async def describe_tables(db_name: str = "main") -> str:
 
 
 @mcp.tool()
-async def inspect_table(table_name: str, limit: int = 10, db_name: str = "main") -> str:
-    """Dump schema and sample rows from a table"""
+async def inspect_table(table_name: str, max_rows: int = 20, db_name: str = "main") -> str:
+    """
+    Returns a summary of a database table, its schema, and up to `max_rows` sample records.
+
+    Args:
+        table_name (str): Name of the table to inspect.
+        max_rows (int, optional): Maximum number of sample records to display. Defaults to 20.
+        db_name (str, optional): Database name. Defaults to "main".
+
+    Returns:
+        str: Formatted HTML summary including table name, description, schema, and sample records. 
+    """
     try:
         sql_driver = get_sql_driver()
         # Try to sort by ForecastDate if the column exists
         cols = sql_driver.execute_query(f"PRAGMA {db_name}.table_info({table_name})")
         col_names = [c.cells.get('name') for c in cols]
         if 'ForecastDate' in col_names:
-            rows = sql_driver.execute_query(f"SELECT * FROM {db_name}.{table_name} ORDER BY ForecastDate DESC LIMIT ?", [limit])
+            rows = sql_driver.execute_query(f"SELECT * FROM {db_name}.{table_name} ORDER BY ForecastDate DESC LIMIT ?", [max_rows])
         else:
-            rows = sql_driver.execute_query(f"SELECT * FROM {db_name}.{table_name} LIMIT ?", [limit])
+            rows = sql_driver.execute_query(f"SELECT * FROM {db_name}.{table_name} LIMIT ?", [max_rows])
 
         table_str = fmt.format_table_name(table_name)
         col_str = fmt.format_columns_as_markdown([c.cells for c in cols])
