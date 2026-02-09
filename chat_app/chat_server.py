@@ -12,6 +12,7 @@ templates = Jinja2Templates(directory="templates")
 # chat_history: list[dict] = []
 
 @app.get(f"{ENDPOINT_PREFIX}", response_class=HTMLResponse)
+@app.get(f"{ENDPOINT_PREFIX}/", response_class=HTMLResponse)
 async def home(request: Request):
     chat_history = []
     return templates.TemplateResponse("index.html", {"request": request, "messages": chat_history})
